@@ -37,3 +37,116 @@ button {
     width: 100px;
     display:none;
 }
+
+#loader3 {
+    width: 100px;
+    display:none;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+    position: fixed;
+    position: -webkit-sticky; /* Safari */
+    position: sticky;
+    top: 0;
+    width: 100%;
+}
+
+li {
+    float: left;
+}
+
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+/* Change the link color to #111 (black) on hover */
+li a:hover:not(.active) {
+    background-color: #111;
+}
+
+.active {
+    background-color: #606060;
+}
+
+.right {
+    float: right;
+    padding: 0 20px 20px 0;
+}
+
+.left {
+    float: left;
+    padding: 0 20px 20px 0;
+}
+
+#bg {
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+      
+    /* Preserve aspet ratio */
+    min-width: 100%;
+    min-height: 100%;
+  }
+
+h3 {
+    font-family: 'Trebuchet MS';
+    font-size: 175%;
+    word-spacing: 10px;
+    letter-spacing: 3px;
+    text-align: center;
+    text-shadow: 2px 1px grey;
+    line-height: 1.8;
+}
+mydiv {
+    text-align: justify;
+}
+
+h4 {
+    margin: 0;
+    padding: 0;
+ 
+    font-family: verdana;
+    font-size: 500%;
+    word-spacing: 10px;
+    letter-spacing: 3px;
+    text-align: center;
+    text-shadow: 2px 1px grey;
+    line-height: 0.0;
+}
+
+h5 {
+    margin: 0;
+    padding: 0;
+ 
+    font-family: verdana;
+    font-size: 400%;
+    word-spacing: 10px;
+    letter-spacing: 3px;
+    text-align: center;
+    text-shadow: 2px 1px grey;
+    line-height: 0.0;
+}
+
+h6 {
+    font-family: 'Trebuchet MS';
+    font-size: 150%;
+    word-spacing: 10px;
+    letter-spacing: 3px;
+    text-align: left;
+    text-shadow: 2px 1px grey;
+    line-height: 1.4;
+    margin-left: 100px
+}
+p.big {
+    line-height: 1.2;
+    font-size: 150%
+}

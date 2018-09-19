@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Pharmto</title>
+
+    <link rel="stylesheet" type="text/css" href="main.css">
+
+    <script src="./node_modules/web3/dist/web3.min.js"></script>
+
+</head>
+<body align="center" style ="background: url('https://img.freepik.com/free-photo/abstract-blur-and-defocused-pharmacy-and-drug-store_1203-9459.jpg?size=338&ext=jpg://cdn.ihs.com/www/homepage/CTA-Grid/Homepage-CTA-grid-Life-Sciences-Top3-659112420-308x250.jpg'); background-size: 100% 100% ">
+    <div class="container">
+		<br>
+		<h5>PHARMTO</h5>
+		<br>
+		<br>
+		<br>
+		
+		<hr>
+
+		<ul>
+			<li><a href="index.html" class="w3-button w3-bar-item">Home</a></li>
+			
+			<li><a href="register.html" class="w3-button w3-bar-item">Registration</a></li>
+			
+			<li><a href="retrieve.html" class="w3-button w3-bar-item">View</a></li>
+			
+			<li><a class="active" href="cart.html" class="w3-button w3-bar-item">Cart</a></li>
+			
+			<li style="float:right"> <a href="user.html" class="w3-button w3-bar-item">Sign Up</a></li>
+
+			<li style="float:right"><a href="contact.html" class="w3-button w3-bar-item">Contact Us</a></li>
+		</ul>
+
+        <hr>
+        <h1>Cart</h1>
+        <span id="countPharmas"></span>
+
+        <h2 id="pharma"></h2>
+        
+		<hr>
+		<p class=big>
+		<span id="pharmaTrans"></span>
+		</p>
+       
+
+        <button id="button">Proceed</button>
+
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+
+    <script>
+        if (typeof web3 !== 'undefined') {
+            web3 = new Web3(web3.currentProvider);
+        } else {
+            // set the provider you want from Web3.providers
+            web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+        }
+        web3.eth.defaultAccount = web3.eth.accounts[0];
+
+        var PharmaContract = web3.eth.contract([
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "uaddress",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"name": "uname",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"name": "ugid",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"name": "mail",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"name": "haddress",
+				"type": "string"
+			}
+		],
+		"name": "userInfo",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "paddress",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"name": "pname",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"name": "drug",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"name": "purpose",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"name": "exp",
+				"type": "string"
+			}
+		],
+		"name": "pharmaInfo",
+		"type": "event"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_mname",
+				"type": "string"
+			}
+		],
+		"name": "addCart",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_pname",
+				"type": "string"
+			},
+			{
+				"name": "_drug",
+				"type": "string"
+			},
+			{
+				"name": "_purpose",
+				"type": "string"
+			},
+			{
+				"name": "_exp",
+				"type": "string"
+			}
+		],
+		"name": "insertDetails",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_uname",
+				"type": "string"
+			},
+			{
+				"name": "_ugid",
+				"type": "string"
+			},
+			{
+				"name": "_email",
+				"type": "string"
+			},
+			{
+				"name": "_haddress",
+				"type": "string"
+			}
+		],
+		"name": "registerUser",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_exp",
+				"type": "string"
+			}
+		],
+		"name": "updateDetails",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "cart",
+		"outputs": [
+			{
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "a",
+				"type": "string"
+			},
+			{
+				"name": "b",
+				"type": "string"
+			}
+		],
+		"name": "compareStrings",
+		"outputs": [
+			{
+				"name": "success",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "countPharmas",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "_mname",
+				"type": "string"
+			}
+		],
+		"name": "getByName",
+		"outputs": [
+			{
+				"name": "",
+				"type": "string"
+			},
+			{
+				"name": "",
+				"type": "string"
+			},
+			{
+				"name": "",
+				"type": "string"
+			},
+			{
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "paddress",
+				"type": "address"
+			}
+		],
+		"name": "getpharmaDetails",
+		"outputs": [
+			{
+				"name": "",
+				"type": "string"
+			},
+			{
+				"name": "",
+				"type": "string"
+			},
+			{
+				"name": "",
+				"type": "string"
+			},
+			{
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "getPharmas",
+		"outputs": [
+			{
+				"name": "",
+				"type": "address[]"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "pharmaAccts",
+		"outputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "pharmas",
+		"outputs": [
+			{
+				"name": "paddress",
+				"type": "address"
+			},
+			{
+				"name": "pname",
+				"type": "string"
+			},
+			{
+				"name": "drug",
+				"type": "string"
+			},
+			{
+				"name": "purpose",
+				"type": "string"
+			},
+			{
+				"name": "exp",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "userAccts",
+		"outputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "users",
+		"outputs": [
+			{
+				"name": "uaddress",
+				"type": "address"
+			},
+			{
+				"name": "uname",
+				"type": "string"
+			},
+			{
+				"name": "ugid",
+				"type": "string"
+			},
+			{
+				"name": "mail",
+				"type": "string"
+			},
+			{
+				"name": "haddress",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "valAddress",
+				"type": "address"
+			}
+		],
+		"name": "validatePharma",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "viewCart",
+		"outputs": [
+			{
+				"name": "",
+				"type": "string[]"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	}
+]);
+
+        var Pharma = PharmaContract.at('0x1415f2a6d941b5ab06bf6ca0abcc518b422ce32b');
+        var pharmaEvent = Pharma.pharmaInfo({},'latest');
+
+        pharmaEvent.watch(function (err, result) {
+            if (!err) {
+                if (result.blockHash != $("#pharmatrans").html()) 
+                    $("#loader").hide();
+                //$("#pharmaTrans").html('Block hash: ' +result.blockHash);
+                $("#pharma").html(web3.result.args.pname + ' - ' + web3.result.args.drug);
+            } else {
+                $("#loader").hide();
+            }
+        });
+        
+        Pharma.countPharmas((err, res) => {
+            if (res)
+                $("#countPharmas").html('Currently registered: '+res.c + ' Pharmas'); 
+        });
+
+
+		/*(function($) {
+    		$(document).load(function() {
+				Pharma.viewCart((err, res) => {
+                	if (err) 
+                   		$("#loader").hide();
+					else
+					{
+						$("#pharmaTrans").html("<p>"+res[0]+"<p>"+res[1]+"<p>");
+  						
+					}
+            	});
+    		});
+		})(jQuery);​*/
+
+		jQuery(window).on("load", function () {
+			$(document).load(function() {
+				Pharma.viewCart((err, res) => {
+                	if (err) 
+                   		$("#loader").hide();
+					else
+					{
+						$("#pharmaTrans").html("<p>"+res[0]+"<p>"+res[1]+"<p>");
+  						
+					}
+            	});
+    		});
+		});
+
+		/*function pageLoad(sender,args) {
+			$(document).ready(function() {
+				Pharma.viewCart((err, res) => {
+                	if (err) 
+                   		$("#loader").hide();
+					else
+					{
+						$("#pharmaTrans").html("<p>"+res[0]+"<p>"+res[1]+"<p>");
+  						
+					}
+            	});
+    		});
+		}*/
+			
+
+        $("#button").click(function() {
+            $("#loader").show();
+            	Pharma.viewCart((err, res) => {
+                	if (err) 
+                   		$("#loader").hide();
+					else
+					{
+						$("#pharmaTrans").html("<p>"+res[0]+"<p>"+res[1]+"<p>");
+  						
+					}
+            	});
+    		alert("Order is being forwarded to payment gateway");
+        });
+        
+    </script>
+
+</body>
+</html>
